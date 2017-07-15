@@ -1,6 +1,10 @@
 from flask import Flask
 from flask import Flask, flash, redirect, render_template, request, session, abort
 import os
+from sqlalchemy.orm import sessionmaker
+from database_setup import *
+engine = create_engine('sqlite:///bucketlist.db', echo = True)
+
  
 app = Flask(__name__)
  
@@ -9,15 +13,22 @@ def home():
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
-        return "hello world!"
-        #return render_template('create_bucketlist.html')
+        #return "hello world!"
+        return render_template('add_bucketlist.html')
  
 @app.route('/login', methods=['POST'])
 def do_admin_login():
-    if request.form['password'] == 'password' and request.form['username'] == 'admin':
+    POST_USERNAME = str(request.form['username'])
+    POST_PASSWORD = str(request.form['password'])
+
+    Session = sessionmaker(bind=engine)
+    s = Session()
+    query_login = s.query(User).filter(User.username.in_([POST_USERNAME]), User.password.in_([POST_PASSWORD]))
+    result = query_login.first()
+    if True:
         session['logged_in'] = True
     else:
-        flash('wrong password!')
+        flash('wrong password')
     return home()
 
 @app.route("/logout")
