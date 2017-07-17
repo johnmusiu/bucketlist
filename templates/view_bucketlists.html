@@ -5,6 +5,70 @@
 {% if session['logged_in'] %}
 <p>You're not logged in, redirecting to login page!</p>
 {% else %}
-<p>Logged in, Loading bucketlists</p>
+ <div class="container">
+    <form class="well form-horizontal" action=" " method="post"  id="add_bucketlist_form">
+      	<fieldset>
+
+        <!-- Form Name -->
+        <legend>View Bucketlist</legend>
+
+   		
+        <div class="row">
+        	<!-- Select bucketlist -->
+	        <div class="form-group"> 
+	            <div class="col-md-4 selectContainer col-md-offset-2">
+	              <div class="input-group">
+	                  <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+	                  <select name="bucketlist" class="form-control selectpicker" >
+	                    <option value=" " >Please select bucketlist category</option>
+	                    <option>Adventure</option>
+	                    <option>Competition</option>
+	                    <option >Savage Mode</option>
+	                  </select>
+	              </div>
+	            </div>
+	           	<div class="col-md-4 selectContainer">
+	              <div class="input-group">
+	                  <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+	                  <select name="activity" class="form-control selectpicker" >
+	                    <option value=" " >Please select activity</option>
+	                    <option>Sky Diving</option>
+	                    <option>Deep Ocean Diving</option>
+	                    <option >Game Hunting</option>
+	                    <option >Run The Lewa Marathon</option>
+	                  </select>
+	              </div>
+	            </div>
+	        </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-md-offset-4"><h4>All Bucketlist Activities </h4></div>
+        </div>
+	    <div class="row">
+			<div class="col-md-2 col-md-offset-2">
+		   		<img class="img-responsive" src="img/lewa_tn.jpg" />
+		   		<p>Run The Lewa Marathon</p>
+		   		<p>Added: 04-06-17</p>
+			</div>
+	 		<div class="col-md-2">
+	   			<img class="img-responsive" src="img/deepsea_tn.jpg" />
+	   			<p>Go Deepsea Diving</p>
+		   		<p>Added: 31-11-16</p>
+	 		</div>
+
+	 		<div class="col-md-2">
+	   			<img class="img-responsive" src="img/skydiving_tn.jpg" />
+	   			<p>Go Skydiving</p>
+		   		<p>Added: 12-07-16</p>
+	 		</div>
+	 		<div class="col-md-2">
+	   			<img class="img-responsive" src="img/gamehunting_tn.jpg" />
+	   			<p>Game Hunting</p>
+		   		<p>Added: 07-06-16</p>
+	 		</div>
+		</div>
+	   	</fieldset>
+    </form>
+  </div><!-- /.container -->
 {% endif %}
 {% endblock %}
