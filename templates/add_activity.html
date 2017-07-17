@@ -5,6 +5,107 @@
 {% if session['logged_in'] %}
 <p>You're not logged in, redirecting to login page!</p>
 {% else %}
-<p>Logged in</p>
+<div class="container">
+    <form class="well form-horizontal" action=" " method="post"  id="add_activity_form">
+      <fieldset>
+
+        <!-- Form Name -->
+        <legend>Create  Activity</legend>
+
+        <div class="row">
+          <div class="col-md-4 col-md-offset-4">
+            <h4>Choose Bucketlist</h4>
+          </div>
+        </div>
+        <!-- Select bucketlist -->
+        <div class="form-group"> 
+          <label class="col-md-4 control-label">Bucketlist</label>
+            <div class="col-md-4 selectContainer">
+              <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+                  <select name="bucketlist_sel" class="form-control selectpicker" >
+                    <option value=" " >Please select bucketlist category</option>
+                    <option>Adventure</option>
+                    <option>Competition</option>
+                    <option >Savage Mode</option>
+                  </select>
+              </div>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+          <div class="col-md-4 col-md-offset-4">
+            <h4>Add Bucketlist Activity</h4>
+          </div>
+        </div>
+
+        <!-- activity name input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label">Activity</label>  
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon "></i></span>
+              <input  name="activity" placeholder="Activity" class="form-control"  type="text">
+            </div>
+          </div>
+        </div>
+
+        <!-- activity description input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label">Description</label>  
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon "></i></span>
+              <textarea name="activity_description" placeholder="Activity Description" class="form-control"  type="text"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- activity location input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label">Place</label>  
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon "></i></span>
+              <input  name="place" placeholder="Enter Intented Activity Place " class="form-control"  type="text">
+            </div>
+          </div>
+        </div>
+
+        <!-- activity participants input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" >People</label> 
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+              <input name="people" placeholder="People You Intent To Complete Activity With" class="form-control"  type="text">
+            </div>
+          </div>
+        </div>
+
+        <!-- image input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" >Image</label> 
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <input type="file" name="image" accept="image/gif, image/jpeg, image/png">
+            </div>
+          </div>
+        </div>
+
+        <!-- Save Button -->
+        <div class="form-group">
+          <label class="col-md-4 control-label"></label>
+          <div class="col-md-4">
+            <button type="submit" class="btn btn-success" > Save </button>
+          </div>
+
+        </div>
+
+      </fieldset>
+    </form>
+    </div>
+  </div><!-- /.container -->
+
 {% endif %}
 {% endblock %}
