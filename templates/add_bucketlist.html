@@ -1,10 +1,81 @@
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<!DOCTYPE html>
+<html lang="en">
+{% block head %}
+  <title>Andela Challenge</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+{% endblock %}
 {% block body %}
 {% if session['logged_in'] %}
-	
+	<div class="container">
+    <form class="well form-horizontal" action="" method="post"  id="add_bucketlist_form">
+      <fieldset>
+
+        <!-- Form Name -->
+        <legend>Create Bucketlist</legend>
+
+        <!-- Name input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label">Name</label>  
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon "></i></span>
+              <input  name="bucketlist" placeholder="Bucketlist Name" class="form-control"  type="text" id="bl_title">
+            </div>
+          </div>
+        </div>
+        
+        <!-- bucketlist desription input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label">Description</label>  
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon "></i></span>
+              <textarea name="description" placeholder="Bucketlist Description" class="form-control"  type="text" id="bl_description"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- image input
+        <div class="form-group">
+          <label class="col-md-4 control-label" >Image</label> 
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <input type="file" name="image" accept="image/gif, image/jpeg, image/png">
+            </div>
+          </div>
+        </div>-->
+
+        <!-- Success message -->
+        <div class="alert alert-success" role="alert" id="success_message" hidden="true">Success <i class="glyphicon glyphicon-thumbs-up"></i> Saved bucketlist sucessfully.</div>
+
+        <p id="p"></p>
+
+        <!-- Save Button -->
+        <div class="form-group">
+          <label class="col-md-4 "></label>
+          <div class="col-md-4">
+            <button type="submit" class="btn btn-success" id="save"> Save </button>
+            <label class="col-md-1"></label>
+            <button type="button" class="btn btn-success" id="view_bucketlist"> View Bucketlists </button>
+          </div>
+
+        </div>
+      </fieldset>
+      <div class="col-offset-4">
+        <p id="a">No Bucketlists Added Yet</p>
+        <ul id = "list_bucketlists"></ul>
+      </div>
+      
+    </form>
+
+    </div>
+  </div><!-- /.container -->
 {% else %}
-<p>You're not logged in, redirecting to login page!</p>
+<div class="container">
+	<p>You're not logged in, redirecting to login page!</p>
+</div>
+
 {% endif %}
 {% endblock %}
