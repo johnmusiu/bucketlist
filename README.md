@@ -1,19 +1,18 @@
 <b> Bucketlist Application </b>
-Bucketlist
 
 This is a web application created using python, java script, HTML, css and bootstrap. It is an application that consumes flaskApi to do simple fuctionalities like creating a bucketlist, editing, deleting and adding items to it. 
 
-Basic fuctionalities
+<b> Basic fuctionalities </b>
 
-User Login/ Registration.
-User creating bucketlist.
-User can view the bucketlist created immediately after creating it.
-User adding items to the specific bucketlist.
-User editing/deleting the bucketlist.
-User can edit and delete the items they added to a particular bucketlist.
-User can search a specific bucketlist.
+   User Login/ Registration.
+   User creating bucketlist.
+   User can view the bucketlist created immediately after creating it.
+   User adding items to the specific bucketlist.
+   User editing/deleting the bucketlist.
+   User can edit and delete the items they added to a particular bucketlist.
+   User can search a specific bucketlist.
 
-Installation
+<b> Installation </b>
 
 1. Create a folder.
 
