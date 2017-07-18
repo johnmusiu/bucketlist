@@ -1,10 +1,6 @@
 from flask import Flask
 from flask import Flask, flash, redirect, render_template, request, session, abort
 import os
-from sqlalchemy.orm import sessionmaker
-from database_setup import *
-engine = create_engine('sqlite:///bucketlist.db', echo = True)
-
  
 app = Flask(__name__)
  
@@ -14,7 +10,7 @@ def home():
         return render_template('login.html')
     else:
         #return "hello world!"
-        return render_template('add_bucketlist.html')
+        return render_template('view_bucketlists.html')
  
 @app.route('/login', methods=['POST'])
 def do_admin_login():
@@ -23,8 +19,7 @@ def do_admin_login():
 
     Session = sessionmaker(bind=engine)
     s = Session()
-    query_login = s.query(User).filter(User.username.in_([POST_USERNAME]), User.password.in_([POST_PASSWORD]))
-    result = query_login.first()
+    result = False
     if True:
         session['logged_in'] = True
     else:
@@ -35,6 +30,16 @@ def do_admin_login():
 def logout():
     session['logged_in'] = False
     return home()
+
+
+@app.route("/add_bucketlist")
+def add_bucketlist():
+    if not session.get('logged_in'):
+        return render_template('login.html')
+    else:
+        #return "hello world!"
+        return render_template('add_bucketlist.html')
+
 
 if __name__ == "__main__":
     app.secret_key = os.urandom(12)
