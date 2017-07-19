@@ -3,14 +3,10 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 {% block body %}
 {% if session['logged_in'] %}
-<!-- 
-  TODO:
-  redirect to home view(listing bucketlists) 
-
--->
+redirect(url_for('add_bucketlist'))
 {% else %}
 <div class="container">
-    <form class="well form-horizontal" id="register" method="POST" onsubmit="return false" >
+    <form class="well form-horizontal" id="register" action="{{ url_for('register') }}" method="POST" onsubmit="return false" >
       <fieldset>
 
         <!-- Form Name -->
