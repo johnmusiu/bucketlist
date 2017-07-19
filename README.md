@@ -26,12 +26,10 @@ This is a web application created using python, java script, HTML, css and boots
    https://github.com/johnmusiu/bucketlist.git
 
 3. Navigate to the project folder: 
-   Bucketlist
+   bucketlist
 
 4. Install project dependencies in your virtual environment.
     pip install -r requirements.txt
-    
-5. Set up project development. Run db migrations.
-    python manage.py db init python manage.py db migrate python manage.py db upgrade 
-6. Run the server.
-    python manage.py runserver
+     
+5. Run the server.
+    python app.py

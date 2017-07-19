@@ -1,12 +1,15 @@
 """Bucketlist Application"""
 import os
+import logging
 
-from flask import Flask, flash, redirect, render_template, request, session, abort
+from flask import Flask, flash, url_for, redirect, render_template, request, session, abort
 
 app = Flask(__name__)
 
 #empty dictionary to hold data initialization
 database = dict()
+
+database = {"admin":"password"}
 
 
 @app.route('/', methods=['GET'])
@@ -21,19 +24,22 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def do_admin_login():
     '''Login method'''
+    error = False
     if request.method == 'POST':
         post_data = request.form.to_dict()
 
         username = post_data.get('username')
         password = post_data.get('password')
+        logging.warning(username)
 
         if username not in database:
-            return "username not associated with any accounts"
+            return render_template('login.html', error="Username not associated with any accounts")
 
         for key, value in database:
             if key == username:
                 if value == password:
                     session['logged_in'] = True
+                    return redirect(url_for('home'))
                 else:
                     flash('wrong username password combination')
     return home()
@@ -82,7 +88,7 @@ def check_login(option: ""):
     '''reusable function for checking whether a user is logged in
         takes in template name requested and returns login if user not logged in
         or loads desired view if user logged in'''
-        
+
     if not session.get('logged_in'):
         return render_template('login.html')
     else:

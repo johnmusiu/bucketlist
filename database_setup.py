@@ -63,6 +63,6 @@ class Activities(Base):
 		self.people = people
 		self.bucketlist_id = bucketlist_id
 
-#add to bottom
+#added to the bottom always
 #adds classes as tables to database
 Base.metadata.create_all(engine)
