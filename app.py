@@ -1,144 +1,41 @@
-"""Bucketlist Application"""
+from flask import Flask
+from flask import Flask, flash, redirect, render_template, request, session, abort
 import os
-import logging
+from sqlalchemy.orm import sessionmaker
+from database_setup import *
+engine = create_engine('sqlite:///bucketlist.db', echo = True)
 
-from flask import Flask, url_for, redirect, render_template, request, session#, abort
-
+ 
 app = Flask(__name__)
-
-#empty dictionary to hold data initialization
-database = dict()
-
-
-@app.route('/', methods=['GET'])
+ 
+@app.route('/')
 def home():
-    '''Defines the home route'''
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
         #return "hello world!"
-        return render_template('view_bucketlists.html')
-
-@app.route('/login', methods=['GET', 'POST'])
-def do_admin_login():
-    '''Login method'''
-    errors = ""
-    if request.method == 'POST':
-        post_data = request.form.to_dict()
-
-        username = post_data.get('username')
-        password = post_data.get('password')
-        logging.warning(username)
-        errors = "Username not associated with any accounts"
-        if username not in database:
-            return render_template('login.html', error= errors)
-
-        for key, value in database.items():
-            if key == username:
-                if value == password:
-                    session['logged_in'] = True
-                    session['user'] = username
-                    return redirect(url_for('add_bucketlist'))
-                elif value != password:
-                    return render_template('login.html',
-                error="wrong username password combination")
-    return home()
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    '''method that handles user registration'''
-    if not session.get('logged_in'):
-        if request.method == 'GET':
-            return render_template('register.html')
-        else:
-            post_data = request.form.to_dict()
-
-            username = post_data.get('email')
-            password = post_data.get('password')
-            confirm_password = post_data.get('confirm_password')
-
-            if not username:
-                return "Username cant be empty"
-            if not password == confirm_password:
-                return "Password missmatch"
-    else:
         return render_template('add_bucketlist.html')
+ 
+@app.route('/login', methods=['POST'])
+def do_admin_login():
+    POST_USERNAME = str(request.form['username'])
+    POST_PASSWORD = str(request.form['password'])
 
-    database[username] = password
-    session['logged_in'] = True
-    session['user'] = username
-    return register()
+    Session = sessionmaker(bind=engine)
+    s = Session()
+    query_login = s.query(User).filter(User.username.in_([POST_USERNAME]), User.password.in_([POST_PASSWORD]))
+    result = query_login.first()
+    if True:
+        session['logged_in'] = True
+    else:
+        flash('wrong password')
+    return home()
 
 @app.route("/logout")
 def logout():
-    '''This method logs out a user, deleting their username from the session'''
     session['logged_in'] = False
-    session.pop('user', None)
-
     return home()
-
-
-@app.route("/add_bucketlist", methods=['GET', 'POST'])
-def add_bucketlist():
-    '''function that handles user input for adding bucketlist'''
-    alerts = ""
-    if not session.get('logged_in'):
-        return render_template('login.html', error="Your session expired, login again!")
-    else:
-        if request.method == 'POST':
-            post_data = request.form.to_dict()
-
-            title = post_data.get('title')
-            desc = post_data.get('description')
-
-            database["bucketlists"]= {"title":  title, "description": desc, "user": session.get('user')}
-            alerts = "inserted successfully"
-            return render_template('add_bucketlist.html', alert=alerts)
-
-        else:
-            return render_template('add_bucketlist.html')
-
-@app.route("/view_bucketlists", methods=['GET', 'POST'])
-def view_bucketlists():
-    ''' '''
-    if not session.get('logged_in'):
-        return render_template('login.html', error="Your session expired, login again!")
-    else:
-        dict1 = {}
-        if request.method == 'GET':
-            for key in database:
-                dict1.append = {key: value}
-    return render_template('view_bucketlists.html')
-
-@app.route("/delete_bucketlist", methods=['GET', 'POST'])
-def delete_bucketlist():
-    ''' '''
-    if not session.get('logged_in'):
-        return render_template('login.html', error="Your session expired, login again!")
-    else:
-        alerts = ""
-        if request.method == 'POST':
-            post_data = request.form.to_dict()
-            key = post_data.get('key')
-
-            if key in dictionary:
-                alert = "delete success"
-            else:
-                alert = "item you are trying to delete was not found"
-                
-        return render_template('view_bucketlists', alert = alerts)
-
-class MethodsClass():
-    '''  '''
-    def delete_bl(Option=""):
-        if option:
-            if option in dictionary.key():
-                if dictionary.delete(option):
-                    return "delete success"
-                else:
-                    return "delete failed, try again!"
-
 
 if __name__ == "__main__":
     app.secret_key = os.urandom(12)
-    app.run(debug=True, host='0.0.0.0', port=4000)
+    app.run(debug=True,host='0.0.0.0', port=4000)
