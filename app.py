@@ -2,14 +2,12 @@
 import os
 import logging
 
-from flask import Flask, flash, url_for, redirect, render_template, request, session, abort
+from flask import Flask, url_for, redirect, render_template, request, session#, abort
 
 app = Flask(__name__)
 
 #empty dictionary to hold data initialization
 database = dict()
-
-database = {"admin":"password"}
 
 
 @app.route('/', methods=['GET'])
@@ -24,24 +22,26 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def do_admin_login():
     '''Login method'''
-    error = False
+    errors = ""
     if request.method == 'POST':
         post_data = request.form.to_dict()
 
         username = post_data.get('username')
         password = post_data.get('password')
         logging.warning(username)
-
+        errors = "Username not associated with any accounts"
         if username not in database:
-            return render_template('login.html', error="Username not associated with any accounts")
+            return render_template('login.html', error= errors)
 
-        for key, value in database:
+        for key, value in database.items():
             if key == username:
                 if value == password:
                     session['logged_in'] = True
-                    return redirect(url_for('home'))
-                else:
-                    flash('wrong username password combination')
+                    session['user'] = username
+                    return redirect(url_for('add_bucketlist'))
+                elif value != password:
+                    return render_template('login.html',
+                error="wrong username password combination")
     return home()
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -62,7 +62,7 @@ def register():
             if not password == confirm_password:
                 return "Password missmatch"
     else:
-        return render_template('view_bucketlists.html')
+        return render_template('add_bucketlist.html')
 
     database[username] = password
     session['logged_in'] = True
@@ -78,21 +78,66 @@ def logout():
     return home()
 
 
-@app.route("/add_bucketlist")
+@app.route("/add_bucketlist", methods=['GET', 'POST'])
 def add_bucketlist():
     '''function that handles user input for adding bucketlist'''
-    check_login('add_bucketlist.html')
-
-
-def check_login(option: ""):
-    '''reusable function for checking whether a user is logged in
-        takes in template name requested and returns login if user not logged in
-        or loads desired view if user logged in'''
-
+    alerts = ""
     if not session.get('logged_in'):
-        return render_template('login.html')
+        return render_template('login.html', error="Your session expired, login again!")
     else:
-        return render_template(option)
+        if request.method == 'POST':
+            post_data = request.form.to_dict()
+
+            title = post_data.get('title')
+            desc = post_data.get('description')
+
+            database["bucketlists"]= {"title":  title, "description": desc, "user": session.get('user')}
+            alerts = "inserted successfully"
+            return render_template('add_bucketlist.html', alert=alerts)
+
+        else:
+            return render_template('add_bucketlist.html')
+
+@app.route("/view_bucketlists", methods=['GET', 'POST'])
+def view_bucketlists():
+    ''' '''
+    if not session.get('logged_in'):
+        return render_template('login.html', error="Your session expired, login again!")
+    else:
+        dict1 = {}
+        if request.method == 'GET':
+            for key in database:
+                dict1.append = {key: value}
+    return render_template('view_bucketlists.html')
+
+@app.route("/delete_bucketlist", methods=['GET', 'POST'])
+def delete_bucketlist():
+    ''' '''
+    if not session.get('logged_in'):
+        return render_template('login.html', error="Your session expired, login again!")
+    else:
+        alerts = ""
+        if request.method == 'POST':
+            post_data = request.form.to_dict()
+            key = post_data.get('key')
+
+            if key in dictionary:
+                alert = "delete success"
+            else:
+                alert = "item you are trying to delete was not found"
+                
+        return render_template('view_bucketlists', alert = alerts)
+
+class MethodsClass():
+    '''  '''
+    def delete_bl(Option=""):
+        if option:
+            if option in dictionary.key():
+                if dictionary.delete(option):
+                    return "delete success"
+                else:
+                    return "delete failed, try again!"
+
 
 if __name__ == "__main__":
     app.secret_key = os.urandom(12)

@@ -3,7 +3,7 @@
 import unittest
 #import logging
 
-from app import app#, database
+from app import app, database
 class TestBucketlistApp(unittest.TestCase):
     """this class contains tests for all logout related issues"""
     def test_(self):
@@ -22,14 +22,14 @@ class TestBucketlistApp(unittest.TestCase):
     def test_login_correct_credentials(self):
         '''tests that login works with good credentials'''
         test = app.test_client(self)
-        response = test.post('/login',
-        data=dict(username="root", password="pass"), follow_redirects = True)
+        response = test.post('/login', data=dict(username="root", password="pass"), follow_redirects=True)
         self.assertIn(b'Login successfull', response.data)
 
     def test_login_incorrect_credentials(self):
         '''tests that login doesnt work with wrong credentials'''
         test = app.test_client(self)
-        response = test.post('/login', data=dict(username="user12", password="pass12"), follow_redirects = True)
+        response = test.post('/login', data=dict(username="user12", 
+        password="pass12"), follow_redirects = True)
         self.assertIn(b'Username not associated with any accounts', response.data)
 
     def test_registration_form_loads(self):

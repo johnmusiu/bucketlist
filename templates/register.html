@@ -6,7 +6,7 @@
 redirect(url_for('add_bucketlist'))
 {% else %}
 <div class="container">
-    <form class="well form-horizontal" id="register" action="{{ url_for('register') }}" method="POST" onsubmit="return false" >
+    <form class="well form-horizontal" id="register" action="{{ url_for('register') }}" method="POST" onsubmit="return true" >
       <fieldset>
 
         <!-- Form Name -->
