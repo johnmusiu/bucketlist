@@ -18,7 +18,6 @@ def home():
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
-        #return "hello world!"
         return render_template('view_bucketlists.html')
 
 
@@ -106,13 +105,12 @@ def add_bucketlist():
 
 @app.route("/view_bucketlists", methods=['GET', 'POST'])
 def view_bucketlists():
-    ''' '''
+    ''' lists bucketlists in a table format'''
     if not session.get('logged_in'):
         return render_template('login.html', error="Your session expired, login again!")
     else:
         bl = {}
         if request.method == 'GET':
-            
             for key, value in database.items():
                 bl['bucketlists'] = {key: value}
     return render_template('view_bucketlists.html', blist=bl)
@@ -120,34 +118,32 @@ def view_bucketlists():
 
 @app.route("/delete_bucketlist", methods=['GET', 'POST'])
 def delete_bucketlist():
-    ''' '''
+    ''' deletes a bucketlist item then reloads the bucketlists page '''
     if not session.get('logged_in'):
         return render_template('login.html', error="Your session expired, login again!")
     else:
         alerts = ""
-        methods_class = MethodsClass()
         if request.method == 'POST':
             post_data = request.form.to_dict()
             key = post_data.get('key')
+
             if key in database.items():
-                alerts = methods_class.delete_bl(key)
-            else:
-                alerts = "item you are trying to delete was not found"             
-        return render_template('view_bucketlists', alert=alerts)
-
-
-class MethodsClass():
-    '''Class to hold general methods for the app, 
-        ones to be used with objects
-    '''
-    def delete_bl(self, option=""):
-        ''' '''
-        if option:
-            if option in database.keys():
-                if database.pop(option):
-                    return "delete success"
+                if database.pop(key):
+                    alerts = "delete success"
                 else:
-                    return "delete failed, try again!"
+                    alerts = "delete failed, try again!"
+
+            else:
+                alerts = "item you are trying to delete was not found"
+        return render_template('view_bucketlists.html', alert=alerts)
+
+@app.route("/edit_bucketlist", methods=['GET', 'POST'])
+def edit_bucketlist():
+    ''' edits a bucketlist '''
+    if not session.get('logged_in'):
+        return render_template('login.html', error="Your session expired, login again!")
+    else:
+        alerts = ""
 
 
 if __name__ == "__main__":
