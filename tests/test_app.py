@@ -4,6 +4,8 @@ import unittest
 #import logging
 
 from app import app, database
+
+
 class TestBucketlistApp(unittest.TestCase):
     """this class contains tests for all logout related issues"""
     def test_(self):
@@ -17,7 +19,7 @@ class TestBucketlistApp(unittest.TestCase):
         test = app.test_client(self)
         response = test.get('/')
         print("--testing home redirects to login if no user is active in session--")
-        self.assertEqual(response.status_code, 200, msg="passes test")
+        self.assertEqual(response.status_code, 302, msg="passes test")
 
     def test_login_correct_credentials(self):
         '''tests that login works with good credentials'''
@@ -27,7 +29,7 @@ class TestBucketlistApp(unittest.TestCase):
             username="root", password="pass"), follow_redirects=True)
         self.assertIn(b'Login successfull', response.data)
 
-    def test_login_incorrect_credentials(self):
+    def test_login_incorrect_details(self):
         '''tests that login doesnt work with wrong credentials'''
         test = app.test_client(self)
         response = test.post(
