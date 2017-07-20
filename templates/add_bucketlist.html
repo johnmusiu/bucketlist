@@ -9,7 +9,7 @@
 {% block body %}
 {% if session['logged_in'] %}
 	<div class="container">
-    <form class="well form-horizontal" action="" method="post"  id="add_bucketlist_form">
+    <form class="well form-horizontal" action="{{ url_for('add_bucketlist')}}" method="post"  id="add_bucketlist_form">
       <fieldset>
 
         <!-- Form Name -->
@@ -21,7 +21,7 @@
           <div class="col-md-4 inputGroupContainer">
             <div class="input-group">
               <span class="input-group-addon"><i class="glyphicon "></i></span>
-              <input  name="bucketlist" placeholder="Bucketlist Name" class="form-control"  type="text" id="bl_title">
+              <input  name="bucketlist" id="title" placeholder="Bucketlist Name" class="form-control"  type="text" id="bl_title">
             </div>
           </div>
         </div>
@@ -32,7 +32,7 @@
           <div class="col-md-4 inputGroupContainer">
             <div class="input-group">
               <span class="input-group-addon"><i class="glyphicon "></i></span>
-              <textarea name="description" placeholder="Bucketlist Description" class="form-control"  type="text" id="bl_description"></textarea>
+              <textarea name="description" id="description" placeholder="Bucketlist Description" class="form-control"  type="text" id="bl_description"></textarea>
             </div>
           </div>
         </div>
@@ -47,9 +47,9 @@
           </div>
         </div>-->
 
-        <!-- Success message -->
-        <div class="alert alert-success" role="alert" id="success_message" hidden="true">Success <i class="glyphicon glyphicon-thumbs-up"></i> Saved bucketlist sucessfully.</div>
-
+        {% if alert %}
+          <p class="error">Success:{{ alert }}</p>
+        {% endif %}
         <p id="p"></p>
 
         <!-- Save Button -->
@@ -58,15 +58,11 @@
           <div class="col-md-4">
             <button type="" class="btn btn-success" id="save"> Save </button>
             <label class="col-md-1"></label>
-            <button type="button" class="btn btn-success" id="view_bucketlist"> View Bucketlists </button>
+            <a href="{{ url_for('view_bucketlists')}}">View Bucketlists</a>
           </div>
 
         </div>
       </fieldset>
-      <div class="col-offset-4">
-        <p id="a">No Bucketlists Added Yet</p>
-        <ul id = "list_bucketlists"></ul>
-      </div>
       
     </form>
 
@@ -76,6 +72,6 @@
 <div class="container">
 	<p>You're not logged in, redirecting to login page!</p>
 </div>
-<script type="text/javascript" src="scrpt_add_bucketlists.js"></script>
+<script type="text/javascript" src="script_add_bucketlists.js"></script>
 {% endif %}
 {% endblock %}
