@@ -4,6 +4,8 @@ This is a web application created using python, java script, HTML, css and boots
 
 [![Build Status](https://travis-ci.org/johnmusiu/bucketlist.svg?branch=master)](https://travis-ci.org/johnmusiu/bucketlist)
 
+[![Build Status](https://travis-ci.org/johnmusiu/bucketlist.svg?branch=day2-3challenge)](https://travis-ci.org/johnmusiu/bucketlist)
+
 <b> Basic fuctionalities </b>
 
    User Login/ Registration.
