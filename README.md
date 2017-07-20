@@ -2,6 +2,8 @@
 
 This is a web application created using python, java script, HTML, css and bootstrap. It is an application that consumes flaskApi to do simple fuctionalities like creating a bucketlist, editing, deleting and adding items to it. 
 
+[![Build Status](https://travis-ci.org/johnmusiu/bucketlist.svg?branch=master)](https://travis-ci.org/johnmusiu/bucketlist)
+
 <b> Basic fuctionalities </b>
 
    User Login/ Registration.
