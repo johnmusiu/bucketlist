@@ -7,7 +7,9 @@ from flask import Flask, url_for, redirect, render_template, request, session#, 
 app = Flask(__name__)
 
 #empty dictionary to hold data initialization
-database = dict()
+database = {}
+
+database['admin'] = "password"
 
 
 @app.route('/', methods=['GET'])
@@ -18,6 +20,7 @@ def home():
     else:
         #return "hello world!"
         return render_template('view_bucketlists.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def do_admin_login():
@@ -31,7 +34,7 @@ def do_admin_login():
         logging.warning(username)
         errors = "Username not associated with any accounts"
         if username not in database:
-            return render_template('login.html', error= errors)
+            return render_template('login.html', error=errors)
 
         for key, value in database.items():
             if key == username:
@@ -40,9 +43,10 @@ def do_admin_login():
                     session['user'] = username
                     return redirect(url_for('add_bucketlist'))
                 elif value != password:
-                    return render_template('login.html',
-                error="wrong username password combination")
+                    return render_template(
+                        'login.html', error="wrong username password combination")
     return home()
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -69,12 +73,12 @@ def register():
     session['user'] = username
     return register()
 
+
 @app.route("/logout")
 def logout():
     '''This method logs out a user, deleting their username from the session'''
     session['logged_in'] = False
     session.pop('user', None)
-
     return home()
 
 
@@ -88,15 +92,17 @@ def add_bucketlist():
         if request.method == 'POST':
             post_data = request.form.to_dict()
 
-            title = post_data.get('title')
+            title = post_data.get('bucketlist')
             desc = post_data.get('description')
 
-            database["bucketlists"]= {"title":  title, "description": desc, "user": session.get('user')}
+            database["bucketlists"] = {
+                "title": title, "description": desc, "user": session.get('user')}
             alerts = "inserted successfully"
             return render_template('add_bucketlist.html', alert=alerts)
 
         else:
             return render_template('add_bucketlist.html')
+
 
 @app.route("/view_bucketlists", methods=['GET', 'POST'])
 def view_bucketlists():
@@ -104,11 +110,14 @@ def view_bucketlists():
     if not session.get('logged_in'):
         return render_template('login.html', error="Your session expired, login again!")
     else:
-        dict1 = {}
+        
         if request.method == 'GET':
-            for key in database:
-                dict1.append = {key: value}
-    return render_template('view_bucketlists.html')
+            html_str = "<ol>"
+            for key, value in database.items():
+                html_str += "<li>"+key+" :"+value+"<li>"
+            html_str += "</ol>"
+    return render_template('view_bucketlists.html', blist=html_str)
+
 
 @app.route("/delete_bucketlist", methods=['GET', 'POST'])
 def delete_bucketlist():
@@ -117,23 +126,26 @@ def delete_bucketlist():
         return render_template('login.html', error="Your session expired, login again!")
     else:
         alerts = ""
+        methods_class = MethodsClass()
         if request.method == 'POST':
             post_data = request.form.to_dict()
             key = post_data.get('key')
-
-            if key in dictionary:
-                alert = "delete success"
+            if key in database.items():
+                alerts = methods_class.delete_bl(key)
             else:
-                alert = "item you are trying to delete was not found"
-                
-        return render_template('view_bucketlists', alert = alerts)
+                alerts = "item you are trying to delete was not found"             
+        return render_template('view_bucketlists', alert=alerts)
+
 
 class MethodsClass():
-    '''  '''
-    def delete_bl(Option=""):
+    '''Class to hold general methods for the app, 
+        ones to be used with objects
+    '''
+    def delete_bl(self, option=""):
+        ''' '''
         if option:
-            if option in dictionary.key():
-                if dictionary.delete(option):
+            if option in database.keys():
+                if database.pop(option):
                     return "delete success"
                 else:
                     return "delete failed, try again!"
