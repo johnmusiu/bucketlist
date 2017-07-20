@@ -3,7 +3,9 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 {% block body %}
 {% if session['logged_in'] %}
-<div class="container">
+<p>You're not logged in, redirecting to login page!</p>
+{% else %}
+ <div class="container">
     <form class="well form-horizontal" action=" " method="post"  id="add_bucketlist_form">
       	<fieldset>
 
@@ -17,7 +19,7 @@
 	            <div class="col-md-4 selectContainer col-md-offset-2">
 	              <div class="input-group">
 	                  <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
-	                  <select name="bucketlist" id="bucketlists" class="form-control selectpicker" >
+	                  <select name="bucketlist" class="form-control selectpicker" >
 	                    <option value=" " >Please select bucketlist category</option>
 	                    <option>Adventure</option>
 	                    <option>Competition</option>
@@ -67,8 +69,6 @@
 		</div>
 	   	</fieldset>
     </form>
-	</div><!-- /.container -->
-{% else %}
-	<p>You're not logged in, redirecting to login page!</p>
+  </div><!-- /.container -->
 {% endif %}
 {% endblock %}
