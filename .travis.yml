@@ -15,7 +15,7 @@ install:
 
 # command to run tests
 script: 
-  python app.py 
+  pytest tests/test_app.py 
 
 after_success: 
   coveralls
