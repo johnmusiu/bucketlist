@@ -110,13 +110,12 @@ def view_bucketlists():
     if not session.get('logged_in'):
         return render_template('login.html', error="Your session expired, login again!")
     else:
-        
+        bl = {}
         if request.method == 'GET':
-            html_str = "<ol>"
+            
             for key, value in database.items():
-                html_str += "<li>"+key+" :"+value+"<li>"
-            html_str += "</ol>"
-    return render_template('view_bucketlists.html', blist=html_str)
+                bl['bucketlists'] = {key: value}
+    return render_template('view_bucketlists.html', blist=bl)
 
 
 @app.route("/delete_bucketlist", methods=['GET', 'POST'])
