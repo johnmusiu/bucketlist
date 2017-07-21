@@ -4,7 +4,7 @@
 {% block body %}
 {% if session['logged_in'] %}
 <div class="container">
-    <form class="well form-horizontal" action=" " method="post"  id="add_bucketlist_form">
+    <form class="well form-horizontal" id="view_bucketlist" action="{{ url_for('delete_bucketlist')}}" method="POST" onsubmit="return true">
       	<fieldset>
 
         <!-- Form Name -->
@@ -48,17 +48,29 @@
 							<tr><th>Title</th><th>Description</th>
 							<tr>
 							{% for key, value1 in value.items() %}
-									<td value=value1> {{ value1 }} </td>
+									<td> {{ value1 }}</td>
 							{% endfor %}
-							<td><a href="{{ url_for('edit_bucketlist')}}">Edit</a></td>
-							<td><a href="{{ url_for('delete_bucketlist')}}">Delete</a></td>
+							<!-- <td><a href="{{ url_for('edit_bucketlist')}}">Edit</a></td> -->
+							
+							<!-- <td><a href="{{ url_for('edit_bucketlist')}}">Edit</a></td> -->
+							
 							</tr>
 						{% endfor %}
+						{% for key, value in blist['bucketlists'].items() %}
+								{% for key, value1  in value.items() %}
+								{% if value1 == 'series' %}
+									<input  type="text" id = "key" value = "{{ value1 }}">  </input>
+									<button class="btn btn-danger" id='delete_btn' type="submit">Delete</button>
+								{% endif %}
+								{% endfor %}
+						{% endfor %}
 				{% endif %}
+						
+
 				</table>
 			{% if alert %}
           <p class="error">Alert:{{ alert }}</p>
-        {% endif %}
+				{% endif %}
 	    <!-- <div class="row">
 			<div class="col-md-2 col-md-offset-2">
 		   		<img class="img-responsive" src="img/lewa_tn.jpg" />

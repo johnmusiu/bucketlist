@@ -109,11 +109,11 @@ def view_bucketlists():
     if not session.get('logged_in'):
         return render_template('login.html', error="Your session expired, login again!")
     else:
-        bl = {}
+        bucketlist_view = {}
         if request.method == 'GET':
             for key, value in database.items():
-                bl['bucketlists'] = {key: value}
-    return render_template('view_bucketlists.html', blist=bl)
+                bucketlist_view['bucketlists'] = {key: value}
+    return render_template('view_bucketlists.html', blist=bucketlist_view)
 
 
 @app.route("/delete_bucketlist", methods=['GET', 'POST'])
@@ -127,15 +127,16 @@ def delete_bucketlist():
             post_data = request.form.to_dict()
             key = post_data.get('key')
 
-            if key in database.items():
-                if database.pop(key):
-                    alerts = "delete success"
-                else:
-                    alerts = "delete failed, try again!"
+            if key in database['bucketlists'].items():
+                # for key1, blocks in database.items():
+                map(database['bucketlists'].pop,[key], None)
+                # for key, val in database:
+                #     del val[key1]
+                alerts = "Deleted successfully"
 
             else:
                 alerts = "item you are trying to delete was not found"
-        return render_template('view_bucketlists.html', alert=alerts)
+        return render_template('add_bucketlist.html', alert=alerts)
 
 @app.route("/edit_bucketlist", methods=['GET', 'POST'])
 def edit_bucketlist():
@@ -143,7 +144,8 @@ def edit_bucketlist():
     if not session.get('logged_in'):
         return render_template('login.html', error="Your session expired, login again!")
     else:
-        alerts = ""
+        #alerts = ""
+        '''redirect to create bucketlist, preload items'''
 
 
 if __name__ == "__main__":
