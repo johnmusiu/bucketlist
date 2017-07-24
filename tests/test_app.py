@@ -3,8 +3,7 @@
 import unittest
 #import logging
 
-from app import app, database
-
+from .app import app, database
 
 class TestBucketlistApp(unittest.TestCase):
     """this class contains tests for all logout related issues"""
@@ -43,6 +42,9 @@ class TestBucketlistApp(unittest.TestCase):
         response = test.get('/register')
         print("---testing register loads---")
         self.assertEqual(response.status_code, 200)
+    
+    #def test_registration_works_goog credentials(self):
+        
 
-if __name__ == '__main__':
+if __name__ == '__app__':
     unittest.main()

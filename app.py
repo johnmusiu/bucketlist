@@ -2,14 +2,15 @@
 import os
 import logging
 
-from flask import Flask, url_for, redirect, render_template, request, session#, abort
+from flask import Flask, url_for, redirect, render_template, request, session, flash, abort
 
 app = Flask(__name__)
 
 #empty dictionary to hold data initialization
 database = {}
+db_bucketlists = {}
 
-database['admin'] = "password"
+#database['admin'] = "password"
 
 
 @app.route('/', methods=['GET'])
@@ -30,26 +31,36 @@ def do_admin_login():
 
         username = post_data.get('username')
         password = post_data.get('password')
-        logging.warning(username)
-        errors = "Username not associated with any accounts"
-        if username not in database:
-            return render_template('login.html', error=errors)
+        #logging.warning(username)
+       # errors = "Username not found"
+        error = None
+        if request.method == 'POST':
+            if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+                error = "Invalid credentials, please try again!"
+            else:
+                session['logged_in'] = True
+                flash("Login success!")
+                return redirect(url_for('add_bucketlist'))
+            return render_template('login.html', error=error)
+        # if username not in database:
+        #     return render_template('login.html', error=errors)
 
-        for key, value in database.items():
-            if key == username:
-                if value == password:
-                    session['logged_in'] = True
-                    session['user'] = username
-                    return redirect(url_for('add_bucketlist'))
-                elif value != password:
-                    return render_template(
-                        'login.html', error="wrong username password combination")
+        # for key, value in database.items():
+        #     if key == username:
+        #         if value == password:
+        #             session['logged_in'] = True
+        #             session['user'] = username
+        #             return redirect(url_for('add_bucketlist'))
+        #         elif value != password:
+        #             return render_template(
+        #                 'login.html', error="wrong username password combination")
     return home()
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     '''method that handles user registration'''
+    
     if not session.get('logged_in'):
         if request.method == 'GET':
             return render_template('register.html')
@@ -94,8 +105,7 @@ def add_bucketlist():
             title = post_data.get('bucketlist')
             desc = post_data.get('description')
 
-            database["bucketlists"] = {
-                "title": title, "description": desc, "user": session.get('user')}
+            db_bucketlists[title] = desc
             alerts = "inserted successfully"
             return render_template('add_bucketlist.html', alert=alerts)
 
@@ -111,8 +121,7 @@ def view_bucketlists():
     else:
         bucketlist_view = {}
         if request.method == 'GET':
-            for key, value in database.items():
-                bucketlist_view['bucketlists'] = {key: value}
+            bucketlist_view = db_bucketlists
     return render_template('view_bucketlists.html', blist=bucketlist_view)
 
 
@@ -126,17 +135,13 @@ def delete_bucketlist():
         if request.method == 'POST':
             post_data = request.form.to_dict()
             key = post_data.get('key')
-
-            if key in database['bucketlists'].items():
-                # for key1, blocks in database.items():
-                map(database['bucketlists'].pop,[key], None)
-                # for key, val in database:
-                #     del val[key1]
-                alerts = "Deleted successfully"
-
-            else:
-                alerts = "item you are trying to delete was not found"
-        return render_template('add_bucketlist.html', alert=alerts)
+            print(key)
+            # if key in db_bucketlists.items():
+            del db_bucketlists[key]
+            alerts = "Deleted successfully"
+            # else:
+                # alerts = "item you are trying to delete was not found"
+        return render_template('view_bucketlists.html', blist=db_bucketlists)
 
 @app.route("/edit_bucketlist", methods=['GET', 'POST'])
 def edit_bucketlist():
@@ -146,7 +151,7 @@ def edit_bucketlist():
     else:
         #alerts = ""
         '''redirect to create bucketlist, preload items'''
-
+        
 
 if __name__ == "__main__":
     app.secret_key = os.urandom(12)
