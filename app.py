@@ -1,8 +1,8 @@
 """Bucketlist Application"""
 import os
-import logging
+#import logging
 
-from flask import Flask, url_for, redirect, render_template, request, session, flash, abort
+from flask import Flask, url_for, redirect, render_template, request, session, flash#, abort
 
 app = Flask(__name__)
 
@@ -25,23 +25,22 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def do_admin_login():
     '''Login method'''
-    errors = ""
+    errors = None
     if request.method == 'POST':
         post_data = request.form.to_dict()
 
-        username = post_data.get('username')
-        password = post_data.get('password')
+        # username = post_data.get('username')
+        # password = post_data.get('password')
         #logging.warning(username)
        # errors = "Username not found"
-        error = None
         if request.method == 'POST':
             if request.form['username'] != 'admin' or request.form['password'] != 'admin':
-                error = "Invalid credentials, please try again!"
+                errors = "Invalid credentials, please try again!"
             else:
                 session['logged_in'] = True
                 flash("Login success!")
                 return redirect(url_for('add_bucketlist'))
-            return render_template('login.html', error=error)
+            return render_template('login.html', error=errors)
         # if username not in database:
         #     return render_template('login.html', error=errors)
 
@@ -149,8 +148,20 @@ def edit_bucketlist():
     if not session.get('logged_in'):
         return render_template('login.html', error="Your session expired, login again!")
     else:
-        #alerts = ""
-        '''redirect to create bucketlist, preload items'''
+        if request.method == 'POST':
+            post_data = request.form.to_dict()
+
+            new_title = post_data.get('key')
+            new_desc = post_data.get('value')
+            org_key = post_data.get('org_key')
+            db_bucketlists[new_title] = ""
+            db_bucketlists[new_title] = db_bucketlists.pop(org_key)
+            db_bucketlists[new_title] = new_desc
+            alerts = "inserted successfully"
+            return render_template('view_bucketlists.html', blist=db_bucketlists)
+        else:
+            return render_template('view_bucketlist.html', blist=db_bucketlists)
+        
         
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
 {% block body %}
 {% if session['logged_in'] %}
 <div class="container well">
@@ -43,28 +44,42 @@
           <div class="col-md-4 col-md-offset-4"><h4>All Bucketlist Activities </h4></div>
 				</div>
 				 {% if blist %}
-						<table class="row col-md-6 col-md-offset-3">
+						<table class="row table-bordered col-md-6 col-md-offset-2">
 							<tr><th>Title</th><th>Description</th>
 							{% for key, value in blist.items() %}
-								
 								<tr>
-								<td> {{ key }}</td><td> {{ value }} </td>
-								<td>
-									<form class="well form-horizontal" id="view_buc" action="{{ url_for('delete_bucketlist')}}" method="POST">
-										<input  type="text" name = "key" id = "key" value = "{{ key }}">  </input>
-										<button class="btn btn-danger" id='delete_btn' type="submit">Delete</button></td>
-									</form>
-								</td>
-								<!-- <td><a href="{{ url_for('edit_bucketlist')}}">Edit</a></td> -->
-								
-								<!-- <td><a href="{{ url_for('edit_bucketlist')}}">Edit</a></td> -->
+									<td> {{ key }}</td><td> {{ value }} </td>
+									<td>
+										<form class="form-horizontal" id="view_buc" action="{{ url_for('delete_bucketlist')}}" method="POST">
+											<input  style="display:none" type="text" name = "key" id = "key" value = "{{ key }}">  </input>
+											<button class="btn btn-danger" id='delete_btn' type="submit">Delete</button></td>
+										</form>
+									</td>
+									<td>
+										<button class="btn btn-info" type="button" id="edit_bl" data-toggle="modal" data-target="#myModal">Edit </button>
+										<div class="modal fade" id="myModal" role="dialog">
+											<div class="modal-dialog">
+												<form class="well form-horizontal" id="view_buc" action="{{ url_for('edit_bucketlist')}}" method="POST">
+													<input style="display:none" type="text" name="org_key" id="org_key" value="{{ key }}"></input>
+													Title:<input type="text" name = "key" id = "key" value = "{{ key }}">  </input>
+													Description:<input type="text" name = "value" id = "desc" value = "{{ value }}">  </input>
+													<button class="btn btn-normal" id='delete_btn' type="submit">Save</button></td>
+												</form>
+											</div>
+										</div>
+									</td>
+									<!-- <td><a href="{{ url_for('edit_bucketlist')}}">Edit</a></td> -->
+									
+									<!-- <td><a href="{{ url_for('edit_bucketlist')}}">Edit</a></td> -->
 								
 								</tr>
+								
 							{% endfor %}
+						</table>
 				{% endif %}
 						
 
-				</table>
+			
 			{% if alert %}
           <p class="error">Alert:{{ alert }}</p>
 				{% endif %}
@@ -98,3 +113,5 @@
 	<p>You're not logged in, redirecting to login page!</p>
 {% endif %}
 {% endblock %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
